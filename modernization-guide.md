@@ -164,10 +164,10 @@ Copilot Chat lets you have a conversation with AI about your code.
 
 4. **Ask about your workspace:**
    ```
-   @workspace Explain the structure of this Java application
+   #codebase Explain the structure of this Java application
    ```
    
-   The `@workspace` prefix tells Copilot to analyze your entire workspace.
+   The `#codebase` prefix tells Copilot to analyze your entire workspace.
 
 5. **Ask for code explanation:**
    - Open `app/src/main/java/com/example/servlet/UserServlet.java`
@@ -251,22 +251,22 @@ Use Copilot to understand the application faster.
 
 2. **Ask about the overall structure:**
    ```
-   @workspace Provide a summary of this Java web application including its architecture, technologies used, and main components
+   #codebase Provide a summary of this Java web application including its architecture, technologies used, and main components
    ```
 
 3. **Ask about specific files:**
    ```
-   @workspace What does UserServlet.java do? Explain its responsibilities and methods.
+   #codebase What does UserServlet.java do? Explain its responsibilities and methods.
    ```
 
 4. **Identify modernization candidates:**
    ```
-   @workspace What parts of this application use outdated or legacy patterns that should be modernized?
+   #codebase What parts of this application use outdated or legacy patterns that should be modernized?
    ```
 
 5. **Ask about dependencies:**
    ```
-   @workspace Analyze the pom.xml file and identify which dependencies are outdated or should be replaced in a modern application
+   #codebase Analyze the pom.xml file and identify which dependencies are outdated or should be replaced in a modern application
    ```
 
 6. **Document your findings:**
@@ -285,7 +285,7 @@ Use Copilot to understand the application faster.
    // What we want to achieve
    ```
 
-**💡 Tip:** Use `@workspace` to give Copilot context about your entire project, not just the current file.
+**💡 Tip:** Use `#codebase` to give Copilot context about your entire project, not just the current file.
 
 ---
 
@@ -1211,7 +1211,7 @@ If time permits and you have Azure access.
 #### 2. Provide Context
 
 - Keep related files open in tabs
-- Use `@workspace` in chat for project-wide context
+- Use `#codebase` in chat for project-wide context
 - Reference existing code patterns
 
 #### 3. Iterate and Refine
@@ -1345,7 +1345,7 @@ Congratulations! In 2 hours, you've:
 
 - [GitHub Copilot App Modernization for Java Extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-java-modernization)
 - [Azure App Modernization](https://azure.microsoft.com/solutions/application-modernization/)
-- **Java Modernization Patterns:** Search in Copilot Chat with `@workspace` for project-specific guidance
+- **Java Modernization Patterns:** Search in Copilot Chat with `#codebase` for project-specific guidance
 
 **AI-Assisted Development:**
 

@@ -650,7 +650,7 @@ To get the most out of the hackathon, consider reviewing:
 
 - **Maven Basics:** Understanding `pom.xml` structure
 - **Azure SQL Database:** Understanding cloud databases vs on-premises
-- **Using `@workspace` in Copilot Chat:** How to give Copilot full project context
+- **Using `#codebase` in Copilot Chat:** How to give Copilot full project context
 
 ---
 
