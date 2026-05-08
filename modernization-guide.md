@@ -14,13 +14,12 @@
 3. [Using GitHub Copilot App Modernization Extension](#3-using-github-copilot-app-modernization-extension)
 4. [Running Assessment and Analysis](#4-running-assessment-and-analysis)
 5. [Understanding Assessment Results](#5-understanding-assessment-results)
-6. [Modernization Planning](#6-modernization-planning)
-7. [Framework Migration (Servlet to Spring Boot)](#7-framework-migration-servlet-to-spring-boot)
-8. [Database Migration](#8-database-migration)
-9. [Building REST APIs](#9-building-rest-apis)
-10. [Testing and Validation](#10-testing-and-validation)
-11. [Preparing for Cloud Deployment](#11-preparing-for-cloud-deployment)
-12. [Best Practices and Tips](#12-best-practices-and-tips)
+6. [Plan and Apply Migration Tasks](#6-plan-and-apply-migration-tasks)
+7. [Database Migration: Sybase to Azure SQL](#7-database-migration-sybase-to-azure-sql)
+8. [Building REST APIs](#8-building-rest-apis)
+9. [Testing and Validation](#9-testing-and-validation)
+10. [Preparing for Cloud Deployment](#10-preparing-for-cloud-deployment)
+11. [Best Practices and Tips](#11-best-practices-and-tips)
 
 ---
 
@@ -351,753 +350,481 @@ This extension provides specialized capabilities for Java application modernizat
 
 ## 4. Running Assessment and Analysis
 
-### What is Application Assessment?
+> Reference: [Working with assessment - GitHub Copilot Modernization for Java](https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java-working-with-assessment?pivots=vscode)
 
-Assessment scans your Java application to identify:
-- Legacy patterns and anti-patterns
-- Security vulnerabilities
-- Outdated dependencies
-- Database dependencies
-- Modernization opportunities
-- Estimated migration effort
+Application assessment is the critical first step in your modernization journey. The GitHub Copilot modernization extension provides two ways to start an assessment, supports multiple reports per run (each run produces an independent report you can compare over time), and lets you import, export, and delete reports.
 
----
+**Two ways to start an assessment:**
 
-### Exercise 4.1: Run Full Assessment (5 minutes)
-
-1. **Open Command Palette:**
-   - Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
-
-2. **Run assessment:**
-   - Type: `GitHub Copilot modernization: Open Assessment List`
-   - Press Enter
-
-3. **Select assessment scope:**
-   - Choose "Recommended Assessment" (analyzes entire codebase)
-
-4. **Wait for assessment to complete:**
-   - Progress shown in status bar
-   - Typically takes 1-3 minutes
-   - Watch the Output panel: `View > Output > App Modernization`
-
-5. **Assessment complete notification:**
-   - Toast notification appears when done
-   - Click "View Results" to see report
-
-**✓ Checkpoint:** Assessment completes without errors and report is generated.
+- **Recommended assessment** — quickly start without manual configuration by selecting from preconfigured domains.
+- **Custom assessment** — fine-grained control over assessment configuration for tailored analysis.
 
 ---
 
-### Exercise 4.2: Review Assessment Dashboard (5 minutes)
+### Exercise 4.1: Run a Recommended Assessment (5 minutes)
 
-The assessment generates a detailed report.
+Use a recommended assessment for the fastest path to results.
 
-1. **Open the Assessment Report:**
-   - Should open automatically after assessment
-   - OR find in `.appmodernization` folder
-   - Look for `assessment-report.html` or `assessment.json`
+1. **Open the GitHub Copilot modernization pane** from the VS Code sidebar.
 
-2. **Review key sections:**
+2. **Start the assessment:**
+   - In the **QUICKSTART** section, select **Start Assessment** or **Open Assessment Dashboard**.
 
-   **a) Overview Summary:**
-   - Total files analyzed
-   - Overall health score
-   - Recommended modernization strategy
+   ![Start Assessment](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/run-assessment-visual-studio-code.png)
 
-   **b) Technology Stack:**
-   - Current Java version (Java 8)
-   - Current frameworks (Servlets, JSP)
-   - Database (Sybase)
-   - Dependencies inventory
+3. **Select Recommended Assessment.**
 
-   **c) Issues Found:**
-   - Critical: Security vulnerabilities
-   - High: Deprecated APIs
-   - Medium: Code smells
-   - Low: Minor improvements
+4. **Choose the domains** you want to assess from the recommended options. Each domain represents a common migration scenario with preconfigured settings.
 
-   **d) Modernization Opportunities:**
-   - Framework migration (Servlet → Spring Boot)
-   - Database migration (Sybase → Azure SQL)
-   - API creation (Add REST endpoints)
-   - Security improvements (Add authentication)
+   ![Recommended Assessment](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/recommended-assessment.png)
 
-3. **Export findings:**
-   - Save assessment report for reference
-   - You'll use this to prioritize modernization tasks
+5. **Select OK** to start the assessment.
 
-**💡 Tip:** Keep this report open in a browser tab for reference throughout the hackathon.
+6. **Wait for the assessment to complete.** When the analysis finishes, the modernization assessor opens the **Assessment Report** automatically and adds a new report entry to the report list.
+
+**✓ Checkpoint:** A new assessment report is generated and visible in the report list.
+
+---
+
+### Exercise 4.2: Run a Custom Assessment (Optional, 5 minutes)
+
+Use a custom assessment when you need to target specific domains, analysis coverage, runtime, or Azure compute targets.
+
+1. In the **QUICKSTART** section, select **Start Assessment** or **Open Assessment Dashboard**.
+
+2. Select **Custom Assessment**.
+
+   ![Custom Assessment](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/custom-assessment.png)
+
+3. **Configure the assessment properties** as described below, then select **Run**.
+
+   ![Custom Assessment Properties](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/custom-assessment-properties.png)
+
+#### Configuration properties
+
+**General: Assessment Domains**
+
+| Domain | Description |
+|--------|-------------|
+| Java Upgrade | Identify outdated app stacks and get upgrade recommendations. |
+| Cloud Readiness | Assess your app's readiness for Azure, with actionable migration guidance. |
+| Security | Scan your code for security issues using ISO 5055 guidelines, with recommended fixes. |
+
+**General: Analysis Coverage**
+
+| Coverage | Description |
+|----------|-------------|
+| Issue only | Analyze source code to detect issues. |
+| Issues & Technologies | Detect issues and identify used technologies. |
+| Issues, Technologies & Dependencies | Detect issues, identify technologies, and map dependencies. |
+
+**Java Upgrade: Target Runtime** (when Java Upgrade is selected): OpenJDK 21 (recommended), OpenJDK 17, or OpenJDK 11.
+
+**Cloud Readiness: Target Compute Services** (when Cloud Readiness is selected): Azure App Service, Azure Kubernetes Service (AKS), or Azure Container Apps (ACA). Choose multiple targets to compare them in the assessment report.
+
+**Cloud Readiness: Target Operating System**: Linux or Windows.
+
+**Cloud Readiness: Containerization**: Enable to analyze problems that need to be fixed to containerize your app.
+
+#### Example configurations
+
+- **Migrate to AKS as Linux containers:** Cloud Readiness + Issue only + AKS + Linux + Enable Containerization.
+- **Migrate to App Service Linux:** Cloud Readiness + Issue only + Azure App Service + Linux.
+- **Modernize to JDK 21:** Java Upgrade + Issue only + OpenJDK 21.
+
+After the assessment completes, an interactive dashboard opens. When you configure multiple Azure service targets, you can switch between them to compare migration approaches.
+
+![Azure Service Target selection](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/list-azure-service-target-for-assessment-report-visual-studio-code.png)
+
+**For this hackathon:** Run a Recommended Assessment with **Cloud Readiness** and **Java Upgrade** domains so you can see issues for both modernization and Azure migration.
+
+---
+
+### Exercise 4.3: Manage Assessment Reports (3 minutes)
+
+Each assessment run generates an independent report. You can import, export, and delete reports from the report list.
+
+1. **Import a report** — In the assessment reports page, select **Import**, or press `Ctrl + Shift + P` and search for *Import assessment report*. Reports can come from AppCAT CLI (`report.json`), an exported GitHub Copilot modernization report, or a Dr. Migrate app context file.
+
+   ![Import assessment report](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/import-assessment-report-visual-studio-code.png)
+
+2. **Export a report** — In the report list, select the **...** (more actions) button on the target report and select **Export**. Share the exported report so others can import it without rerunning the assessment.
+
+   ![Export assessment report](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/export-assessment-report-visual-studio-code.png)
+
+3. **Delete a report** — In the report list, select **...** > **Delete** on the report you no longer need.
+
+   ![Delete assessment report](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/delete-assessment-report-visual-studio-code.png)
+
+**✓ Checkpoint:** You know how to run, view, import, export, and delete assessment reports.
 
 ---
 
 ## 5. Understanding Assessment Results
 
-### Exercise 5.1: Analyze Critical Findings (10 minutes)
+> Reference: [Understand assessment coverage by GitHub Copilot modernization](https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java-assess-rules) · [Interpret the assessment report](https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java-working-with-assessment?pivots=vscode#interpret-the-assessment-report)
 
-Let's dig into the issues found and understand what they mean.
+The assessment detects issues across **three domains**, surfaces the **dependencies** and **technologies** in use, and produces a categorized, prioritized report so you can plan your migration confidently.
 
-#### Finding #1: Hardcoded Database Credentials
+---
 
-**Location:** `DatabaseConnection.java:11-13`
+### Exercise 5.1: Tour the Assessment Report (5 minutes)
+
+The assessment report consists of:
+
+- **Application Information** — Java version, frameworks, build tools, and project structure.
+- **Issue Summary** — Issues categorized by domain with criticality percentages.
+- **Detailed Analysis** — Four tabs: Issues, Dependencies, Technologies, Insights.
+
+![Assessment report dashboard](/images/assessment-report-summary.png)
+
+#### Issues tab
+
+Categorized list of issues across Cloud Readiness, Java Upgrade, and Security that you need to address to migrate the application.
+
+**Criticality:**
+
+| Level | Meaning |
+|-------|---------|
+| Mandatory | Issues that you must fix for migration to Azure. |
+| Potential | Issues that might impact migration and need review. |
+| Optional | Low-impact issues. Fixing them is recommended but optional. |
+
+![Issue list](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-issue-list-visual-studio-code.png)
+
+Expand any issue to see:
+
+- A list of files where the incidents occurred (with line counts).
+- A detailed description of the problem, known solutions, and supporting documentation.
+
+![Issue detail](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-issue-detail-visual-studio-code.png)
+
+#### Dependencies tab
+
+Lists all Java-packaged dependencies found in the application.
+
+![Dependency list](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-dependency-list-visual-studio-code.png)
+
+#### Technologies tab
+
+Embedded libraries grouped by function — gives you a quick understanding of what the application does.
+
+![Technology list](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-technology-list-visual-studio-code.png)
+
+#### Insights tab
+
+File details and information that help you understand the detected technologies.
+
+![Insight list](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-insight-list-visual-studio-code.png)
+
+---
+
+### Exercise 5.2: Issue Coverage by Domain (10 minutes)
+
+The assessment detects issues across three domains. Cross-reference the rules below with what you see in your report.
+
+#### Domain: cloud-readiness
+
+Identifies portability, scalability, and statelessness concerns that block successful Azure migration.
+
+| Rule | What it detects |
+|------|-----------------|
+| credential-migration | Hardcoded cloud credentials and embedded secret-management libraries. |
+| region-configuration | Hardcoded cloud region identifiers in code or config. |
+| storage-migration | Vendor object-storage SDK usage (AWS S3, GCS) that doesn't map to native Azure storage. |
+| messaging-service-migration | Dependencies and connection strings for SQS/SNS, Kafka, RabbitMQ, ActiveMQ, IBM MQ, Pub/Sub, etc. |
+| **database-migration** | Connection strings, drivers, and timeouts for MongoDB, MySQL, PostgreSQL, MSSQL, Cassandra, MariaDB, Oracle, Db2, **Sybase ASE**, Firebird, SQLite, and more. |
+| file-system-management | Local filesystem reads/writes that break in ephemeral cloud containers. |
+| local-credential | `.jks` keystore files and clear-text passwords in property/XML files. |
+| configuration-management | OS-specific or local-file configuration that doesn't scale. |
+| session-management | `HttpSession` state and the `distributable` web descriptor tag. |
+| remote-communication | CORBA, RMI, JCA, unsecured HTTP/FTP, raw sockets, hardcoded URLs. |
+| jakarta-migration | Jakarta/Java EE APIs and proprietary JBoss/WebLogic/WebSphere artifacts. |
+| containerization | Missing Dockerfile or problematic Dockerfile instructions. |
+| scheduled-job-migration | AWS Lambda handlers, GCP Functions, Quartz, Spring Batch — needs cloud event-driven refactor. |
+| apm-migration | Embedded New Relic / Elastic APM / Dynatrace agents. |
+| auth-migration | SAML, OAuth 2.0, OpenID, Spring Security, LDAP, legacy webform auth. |
+| os-compatibility | Windows-specific `.dll` dependencies that don't run on Linux containers. |
+
+**For our app:** the **database-migration** rule will flag the Sybase ASE driver — a key issue for our Sybase → Azure SQL move.
+
+#### Domain: java-upgrade
+
+| Rule | What it detects |
+|------|-----------------|
+| java-version-upgrade | Non-LTS Java versions (9, 10, 12–16, 19, 20) and legacy versions (1.x–8, 11). |
+| framework-upgrade | Spring Boot, Spring Cloud, Spring Framework, Jakarta EE versions past end-of-OSS-support. |
+| deprecated-apis | Hundreds of removed/deprecated APIs (`sun.misc.BASE64`, `Thread.stop`, JBoss/Seam/WebLogic/WebSphere internals). |
+| build-tool | Legacy build systems like Ant (`build.xml`) or Eclipse-specific WTP/JEM project natures. |
+
+**For our app:** **java-version-upgrade** will flag Java 8 (legacy) and **build-tool** may flag any legacy patterns.
+
+#### Domain: Security (ISO 5055 guided)
+
+The Security domain detects 42 security weaknesses curated from the [ISO/IEC 5055](https://www.it-cisq.org/standards/code-quality-standards/) standard — designed to "find and prevent the 8% of flaws that cause 90% of production issues."
+
+Highlights you are likely to see in this codebase:
+
+| CWE | Title |
+|-----|-------|
+| CWE-89 | SQL Injection |
+| CWE-564 | SQL Injection: Hibernate |
+| CWE-79 | Cross-site Scripting |
+| CWE-22 / CWE-23 / CWE-36 | Path Traversal variants |
+| CWE-77 / CWE-78 / CWE-88 | Command and Argument Injection |
+| CWE-90 / CWE-91 / CWE-643 / CWE-652 | LDAP / XML / XPath / XQuery Injection |
+| CWE-259 / CWE-321 / CWE-798 | Hard-coded password / cryptographic key / credentials |
+| CWE-434 | Unrestricted Upload of File with Dangerous Type |
+| CWE-456 / CWE-457 / CWE-665 | Missing/improper variable or resource initialization |
+| CWE-477 | Use of Obsolete Function |
+| CWE-502 | Deserialization of Untrusted Data |
+| CWE-543 / CWE-567 / CWE-662 / CWE-820 / CWE-821 | Synchronization & multithreading issues |
+| CWE-611 | Improper Restriction of XML External Entity Reference |
+| CWE-732 | Incorrect Permission Assignment for Critical Resource |
+| CWE-772 / CWE-775 | Missing Release of Resource / File Descriptor |
+| CWE-778 | Insufficient Logging |
+| CWE-835 | Loop with Unreachable Exit Condition (infinite loop) |
+| CWE-1057 | Data access bypassing the central data manager component |
+
+**For our app:** expect **CWE-798 / CWE-259** to flag the hardcoded `sa` / `Welcome1234!` credentials in `DatabaseConnection.java`, and **CWE-89** to flag any string-concatenated SQL in `UserDAO.java`.
+
+---
+
+### Exercise 5.3: Prioritize Modernization Tasks (5 minutes)
+
+Use the report's criticality and domain breakdown to build a roadmap.
+
+1. **Open Copilot Chat** and ask:
+
+   ```text
+   Based on the assessment results for this Java application, create a prioritized modernization roadmap with tasks ordered by criticality and dependencies.
+   ```
+
+2. **Suggested ordering**:
+
+   **Phase 1 — Mandatory (blocker)**: hardcoded credentials, Java 8 upgrade, Sybase driver, missing Dockerfile.
+
+   **Phase 2 — Potential (high impact)**: Servlet → Spring Boot, JSP → REST + Thymeleaf, externalized configuration.
+
+   **Phase 3 — Optional (improvements)**: API documentation, observability, advanced security hardening.
+
+3. **Save the roadmap** as `modernization-roadmap.md` to track progress.
+
+**✓ Checkpoint:** You can map issues in the report to the rules above and have a prioritized plan.
+
+---
+
+## 6. Plan and Apply Migration Tasks
+
+> Reference: [Quickstart: Assess and migrate a Java project using GitHub Copilot modernization](https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java-quickstart-assess-migrate?pivots=vscode)
+
+GitHub Copilot modernization ships with **predefined tasks** for the most common migration scenarios — from upgrading the JDK and frameworks to replacing database clients with Managed Identity authentication. The recommended workflow is:
+
+1. **Upgrade JDK and dependency versions** (TASKS – Upgrade Tasks).
+2. **Run an assessment** (Section 4) and review the report (Section 5).
+3. **Run a predefined migration task** from the report.
+4. **Drive the validation iteration** until the build, tests, and consistency checks pass.
+5. **Generate unit tests** (Quality & Security Tasks).
+
+> In Visual Studio Code, GitHub Copilot modernization uses the `AppModernization` custom agent with **Claude Sonnet 4.5** by default, falling back to `auto` if not available. You can switch models from the chat language-model picker.
+
+---
+
+### Exercise 6.1: Choose a Modernization Strategy (3 minutes)
+
+Three common approaches:
+
+- **Big Bang (full rewrite):** clean slate, highest risk — best for small apps.
+- **Strangler Fig (incremental):** gradually replace old code — best for large production systems.
+- **Hybrid (lift and modernize):** keep structure, upgrade technologies — best for time-boxed migrations and POCs.
+
+**For this hackathon we use the Hybrid strategy:** keep the `User` model and business logic, replace Servlet with Spring Boot, replace JDBC `UserDAO` with Spring Data JPA, upgrade to Java 17/21, and externalize configuration.
+
+**Success criteria:**
+
+- All CRUD operations work via REST endpoints.
+- No hardcoded credentials anywhere in source.
+- Java 17+ on Spring Boot 3.x.
+- Build green: `mvn clean test`.
+- Application starts in < 10 seconds; API responses < 500 ms.
+
+---
+
+### Exercise 6.2: Upgrade JDK and Frameworks (5 minutes)
+
+You can upgrade the JDK in two equivalent ways from the **GitHub Copilot modernization** pane:
+
+- **QUICKSTART → Upgrade Runtime & Frameworks**
+- **TASKS – Upgrade Tasks → Upgraded Java Runtime**
+
+![Upgrade Runtime](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/upgrade-java-version-visual-studio-code.png)
+
+To upgrade the Spring framework or any third-party dependency, run the **Upgrade Java Framework** task in **TASKS – Upgrade Tasks**.
+
+![Upgrade Java Framework](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/upgrade-framework-version-visual-studio-code.png)
+
+For our app:
+
+- Upgrade JDK to **OpenJDK 21** (or 17 LTS).
+- Upgrade to **Spring Boot 3.x** so we can use Jakarta namespaces, Spring Data JPA, and modern Tomcat.
+
+---
+
+### Exercise 6.3: Apply a Predefined Migration Task (15 minutes)
+
+After the assessment finishes (Section 4), the report shows issues with **suggested solutions** you can run as predefined tasks.
+
+1. **Open the Assessment Report** and locate a relevant issue, for example:
+   - *Servlet container migration*
+   - *Database Migration (Sybase / Microsoft SQL)*
+   - *Credential management — replace local credentials with Managed Identity*
+
+   ![Assessment report with task](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-visual-studio-code.png)
+
+2. **Pick a solution** from the issue's solution list and select **Run Task**.
+
+   ![Run Task](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/confirm-sql-solution-visual-studio-code.png)
+
+3. **Copilot Chat opens in Agent Mode.** The agent first generates two files:
+   - `plan.md` — the proposed migration plan. Review and edit if needed.
+   - `progress.md` — a live progress tracker.
+
+4. **Type `continue`** in chat to confirm and start the migration.
+
+5. **Version control checkpoint** — before any code changes, the agent checks the VCS status and **checks out a new branch** for the migration.
+
+6. **Tool confirmations** — the agent invokes various GitHub Copilot modernization tools. Repeatedly select or enter **Continue** to confirm each tool/command and let the code changes complete.
+
+**Why predefined tasks beat ad-hoc prompting:**
+
+- They orchestrate plan → branch → code → validate → fix.
+- They emit structured plans you can review (`plan.md` / `progress.md`).
+- They work hand-in-hand with the validation iteration below.
+
+---
+
+### Exercise 6.4: Validation Iteration (10 minutes)
+
+After the agent finishes the initial code changes, type `continue` to enter the **validation and fix iteration loop**. The loop runs five tools in sequence:
+
+1. **`Validate-CVEs`** — detects Common Vulnerabilities and Exposures in current dependencies and fixes them.
+2. **`Build-Project`** — attempts to resolve any build errors.
+3. **`Consistency-Validation`** — analyzes the code for functional consistency with the legacy behavior.
+4. **`Run-Test`** — runs unit tests, generates a fix plan for failures, and iterates until tests pass.
+5. **`Completeness-Validation`** — catches migration items missed in the initial pass and fixes them.
+
+Once all tools complete, type `continue` once more to **generate the migration summary**. Review the diff and select **Keep** to accept the changes.
+
+**✓ Checkpoint:** Code is migrated, build is green, tests pass, and the migration summary is generated.
+
+---
+
+### Exercise 6.5: Generate Unit Test Cases (5 minutes)
+
+Use the dedicated task to expand test coverage on the modernized code.
+
+1. Open the **GitHub Copilot modernization** pane.
+2. In **TASKS** → **Quality & Security Tasks**, select **Generate Unit Test Cases**.
+3. The agent generates unit tests and produces a **TestReport** showing test results before and after generation.
+
+**✓ Checkpoint:** You have additional generated unit tests with a measurable coverage delta.
+
+---
+
+## 7. Database Migration: Sybase to Azure SQL
+
+> Reference: [Migrate from Oracle to PostgreSQL by using GitHub Copilot modernization](https://learn.microsoft.com/en-us/azure/developer/java/migration/migrate-github-copilot-app-modernization-for-java-oracle-to-postgresql) (the same task pattern applies for Sybase → Azure SQL homogeneous-style migration)
+
+GitHub Copilot modernization provides a list of predefined tasks for **database migration scenarios**, including a dedicated **Microsoft SQL Server** task. The task focuses on:
+
+- **Database client update** — replace username/password with **Azure Managed Identity** authentication.
+- **SQL conversion** — adjust SQL dialect from Sybase ASE to Azure SQL (Microsoft SQL Server).
+
+Sybase ASE and Microsoft SQL Server share **Transact-SQL (T-SQL) heritage**, so most syntax is compatible — but you still need to address vendor-specific constructs (e.g., `SET ROWCOUNT`, `IDENTITY` syntax, `GETDATE()` defaults, `DATETIME` vs `DATETIME2`, isolation hints, `sp_*` system procedures).
+
+> **Heterogeneous-style hint:** the Oracle → PostgreSQL workflow uses **coding notes** (`coding_notes.md`) to drive a more accurate SQL conversion. For Sybase → Azure SQL the conversion is mostly homogeneous T-SQL, so coding notes are typically not required — but you can still drop a `coding_notes.md` into `.github\<migration>\*\results\application_guidance\` to give the agent project-specific schema hints.
+
+---
+
+### Exercise 7.1: Run the Sybase → Azure SQL Migration Task (15 minutes)
+
+1. **Run the application assessment** (see Section 4) with the **Cloud Readiness** domain selected, so the **database-migration** rule fires for the Sybase ASE driver.
+
+2. **Review the assessment report.** Because the codebase uses Sybase, the report surfaces a **Database Migration (Microsoft SQL)** issue with a default solution to migrate the database client to **Azure SQL Database with Managed Identity**.
+
+   ![Database migration issue in report](/images/sybase-migration-task-001.png)
+
+3. **(Optional) Place coding notes.** If you have schema-conversion guidance from a DBA or from a database-migration tool, save it as `coding_notes.md` under:
+
+   ```text
+   .github\<migration-task-folder>\*\results\application_guidance\coding_notes.md
+   ```
+
+   Coding notes can include:
+   - Data type mappings and structural changes.
+   - Conversion details for sequences, identities, and composite types.
+   - Adjustments to date/time or interval implementations.
+   - References to tables with referential integrity constraints.
+   - Summaries of complex stored procedures and function signatures.
+   - Additional AI-generated hints to improve translation accuracy.
+
+4. **Select Run Task** on the issue. If `coding_notes.md` is present, the agent uses it to produce a higher-quality SQL conversion alongside the database client update with Managed Identity authentication. Otherwise it applies general **Sybase ASE → Microsoft SQL / Azure SQL** syntax adjustments.
+
+   ![Migration task execution](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/oracle-postgresql-coding-notes.png)
+
+5. **Drive the validation iteration** (Section 6.4): `Validate-CVEs` → `Build-Project` → `Consistency-Validation` → `Run-Test` → `Completeness-Validation`.
+
+**✓ Checkpoint:** The Sybase JDBC driver and credentials are replaced with the **mssql-jdbc** driver and **DefaultAzureCredential** / Managed Identity, and the build/tests are green.
+
+---
+
+### Exercise 7.2: Verify Sybase-Specific SQL Was Converted (5 minutes)
+
+Spot-check the most common Sybase → Azure SQL conversions in the diff:
+
+| Sybase ASE | Azure SQL Database |
+|------------|---------------------|
+| `SET ROWCOUNT 3` then query | `SELECT TOP 3 ...` |
+| `id INT IDENTITY` | `id INT IDENTITY(1,1)` |
+| `DATETIME DEFAULT GETDATE()` | `DATETIME2 DEFAULT SYSUTCDATETIME()` |
+| `sp_*` Sybase system procedures | Azure SQL DMV equivalents (e.g., `sys.dm_*`) |
+| `String.format` SQL concatenation | Parameterized `PreparedStatement` / JPA |
+| `com.sybase.jdbc4.jdbc.SybDriver` | `com.microsoft.sqlserver.jdbc.SQLServerDriver` |
+| `jdbc:sybase:Tds:host:port/db` | `jdbc:sqlserver://host:1433;database=db;authentication=ActiveDirectoryDefault` |
+
+**Tip:** With Spring Data JPA you can replace `SET ROWCOUNT 3` with a method-name query:
 
 ```java
-dataSource.setUsername("sa");
-dataSource.setPassword("Welcome1234!");  // ⚠️ Security Risk
+List<User> findTop3ByOrderByIdAsc();
 ```
 
-**Risk Level:** CRITICAL  
-**Category:** Security Vulnerability
+JPA generates the right `TOP` / `LIMIT` syntax for the active dialect — no more database-specific SQL.
 
-**Why it's a problem:**
-- Credentials committed to source control
-- Anyone with repo access can see password
-- Password visible in compiled code
-- Compliance violations (PCI, SOC2, HIPAA)
+---
 
-**Recommended fix:**
-- Use environment variables
-- Use Azure Key Vault for production
-- Never commit secrets to Git
+### Exercise 7.3: Confirm Managed Identity Wiring (5 minutes)
 
-**Ask Copilot:**
-```
-How do I externalize database credentials in Spring Boot?
+Check `application.properties` (or `application.yml`):
+
+```properties
+spring.datasource.url=jdbc:sqlserver://${SQL_SERVER}.database.windows.net:1433;database=${SQL_DB};authentication=ActiveDirectoryDefault;encrypt=true;trustServerCertificate=false
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
 ```
 
----
+Notice:
 
-#### Finding #2: Old Java Version (Java 8)
+- **No `username` / `password`** — auth flows through Managed Identity (`ActiveDirectoryDefault`).
+- The `mssql-jdbc` driver replaces the Sybase driver in `pom.xml`.
+- For local development you can keep an H2 (`MODE=MSSQLServer`) profile, while production resolves credentials via the Azure Identity SDK.
 
-**Location:** `pom.xml:17-18`
-
-```xml
-<maven.compiler.source>1.8</maven.compiler.source>
-<maven.compiler.target>1.8</maven.compiler.target>
-```
-
-**Risk Level:** HIGH  
-**Category:** Outdated Technology
-
-**Why it's a problem:**
-- Java 8 public updates ended in 2019
-- Missing modern language features
-- Performance improvements in newer versions
-- Security vulnerabilities
-
-**Recommended fix:**
-- Upgrade to Java 17 LTS (or Java 21)
-- Update pom.xml compiler settings
-- Test for breaking changes
+**✓ Checkpoint:** No credentials in source, the app binds to Azure SQL via Managed Identity, and Sybase-specific SQL has been converted.
 
 ---
 
-#### Finding #3: Legacy Servlet Architecture
+## 8. Building REST APIs
 
-**Location:** `UserServlet.java` (entire file)
-
-**Risk Level:** MEDIUM  
-**Category:** Architectural Debt
-
-**Why it's a problem:**
-- Verbose boilerplate code
-- Manual request routing
-- No REST API support
-- Hard to test
-- Limited functionality
-
-**Recommended fix:**
-- Migrate to Spring Boot with Spring MVC
-- Use `@RestController` and `@RequestMapping`
-- Auto-configuration benefits
-- Reduce code by 50%+
-
----
-
-#### Finding #4: Sybase Database Dependency
-
-**Location:** `pom.xml:43-47`, `DatabaseConnection.java:11`
-
-**Risk Level:** HIGH  
-**Category:** Vendor Lock-in
-
-**Why it's a problem:**
-- Proprietary database (expensive)
-- Non-standard SQL syntax
-- Limited cloud support
-- Shrinking community
-
-**Recommended fix:**
-- Migrate to PostgreSQL (open source)
-- OR Azure SQL Database (managed)
-- Use Spring Data JPA (database agnostic)
-- Abstract SQL dialects
-
----
-
-#### Finding #5: No Authentication/Authorization
-
-**Location:** Entire application
-
-**Risk Level:** CRITICAL  
-**Category:** Security Vulnerability
-
-**Why it's a problem:**
-- Anyone can access all endpoints
-- No user identity verification
-- No access control
-- Data breach risk
-
-**Recommended fix:**
-- Implement Spring Security
-- Add Azure AD integration
-- Role-based access control (RBAC)
-- OAuth 2.0 / OpenID Connect
-
----
-
-### Exercise 5.2: Prioritize Modernization Tasks (5 minutes)
-
-Based on assessment results, let's prioritize what to modernize.
-
-1. **Use Copilot to create a task list:**
-   - Open Copilot Chat
-   - Ask:
-   ```
-   Based on the assessment results for this Java application, create a prioritized modernization roadmap with tasks ordered by importance and dependencies. Include estimated effort for each task.
-   ```
-
-2. **Review the suggested roadmap:**
-   
-   **Example output:**
-   ```markdown
-   # Modernization Roadmap
-   
-   ## Phase 1: Foundation (30 min)
-   1. ✓ Setup Spring Boot project structure
-   2. ✓ Migrate User model to JPA Entity
-   3. ✓ Update pom.xml to Java 17 and Spring Boot
-   
-   ## Phase 2: Framework Migration (40 min)
-   4. ☐ Replace UserDAO with Spring Data JPA Repository
-   5. ☐ Convert UserServlet to Spring REST Controller
-   6. ☐ Remove JSP pages (or replace with Thymeleaf)
-   
-   ## Phase 3: Database Migration (20 min)
-   7. ☐ Update schema for Azure SQL compatibility
-   8. ☐ Fix Sybase-specific SQL queries
-   9. ☐ Prepare for Azure SQL deployment
-   
-   ## Phase 4: Security & Config (20 min)
-   10. ☐ Externalize configuration to application.properties
-   11. ☐ Remove hardcoded credentials
-   12. ☐ Add Spring Security (time permitting)
-   ```
-
-3. **Save this roadmap:**
-   - Copy to `modernization-roadmap.md` in your workspace
-   - Use it to track progress during hackathon
-
-**✓ Checkpoint:** You have a clear, prioritized list of modernization tasks.
-
----
-
-## 6. Modernization Planning
-
-Before we start coding, let's plan the modernization strategy.
-
-### Exercise 6.1: Choose Modernization Strategy (5 minutes)
-
-There are several approaches to modernization:
-
-#### Strategy A: Big Bang (Full Rewrite)
-**Approach:** Rewrite application from scratch in Spring Boot  
-**Pros:** Clean slate, modern patterns  
-**Cons:** High risk, time-consuming, hard to validate  
-**Best for:** Small apps, complete architecture change
-
-#### Strategy B: Strangler Fig (Incremental)
-**Approach:** Gradually replace old code with new  
-**Pros:** Lower risk, continuous delivery  
-**Cons:** Longer timeline, both systems running  
-**Best for:** Large apps, production systems
-
-#### Strategy C: Hybrid (Lift and Modernize)
-**Approach:** Keep structure, upgrade technologies  
-**Pros:** Fast, lower risk, maintains functionality  
-**Cons:** Some legacy patterns remain  
-**Best for:** Time-constrained modernizations, POCs
-
-**For this hackathon, we'll use Strategy C (Hybrid):**
-- Keep User model and business logic structure
-- Replace Servlet with Spring Boot controller
-- Replace JDBC DAO with Spring Data JPA
-- Update dependencies and Java version
-- Add REST API endpoints
-
----
-
-### Exercise 6.2: Define Success Criteria (5 minutes)
-
-What does "success" look like after modernization?
-
-**Use Copilot to help define criteria:**
-```
-Based on this legacy Java servlet application, what should be the success criteria for modernization to Spring Boot? List functional, non-functional, and technical success metrics.
-```
-
-**Suggested success criteria:**
-
-**Functional Requirements:**
-- [ ] All CRUD operations work (Create, Read, Update, Delete users)
-- [ ] Data is preserved during migration
-- [ ] No loss of existing features
-- [ ] REST API endpoints respond correctly
-
-**Non-Functional Requirements:**
-- [ ] Application starts in < 10 seconds
-- [ ] Response time < 500ms for API calls
-- [ ] Zero security vulnerabilities (high/critical)
-- [ ] Code reduced by 40%+ (through Spring Data)
-
-**Technical Requirements:**
-- [ ] Java 17+ compilation target
-- [ ] Spring Boot 3.x framework
-- [ ] Azure SQL Database or H2 (in-memory) compatibility
-- [ ] No hardcoded credentials
-- [ ] Unit tests for core functionality (80% coverage)
-- [ ] Passes Maven build: `mvn clean test`
-
----
-
-## 7. Framework Migration (Servlet to Spring Boot)
-
-Now the fun begins! We'll use GitHub Copilot to help migrate from Servlets to Spring Boot.
-
----
-
-### Exercise 7.1: Generate Spring Boot Project Structure (10 minutes)
-
-1. **Create a new Spring Boot project folder:**
-   ```bash
-   cd c:\github\github-copilot-appmod-java
-   mkdir app-modernized
-   cd app-modernized
-   ```
-
-2. **Use Copilot to generate pom.xml:**
-   - Create new file: `pom.xml`
-   - Write a comment:
-   ```xml
-   <!-- Spring Boot 3.2 Maven POM for user management application
-        - Java 17
-        - Spring Boot Starter Web
-        - Spring Boot Starter Data JPA
-        - Azure SQL Database driver (mssql-jdbc)
-        - H2 database for local testing
-        - Spring Boot Starter Test
-   -->
-   ```
-
-3. **Press Enter and let Copilot generate:**
-   - Accept Copilot's suggestion
-   - It should generate a complete Spring Boot pom.xml
-
-4. **Review and adjust if needed:**
-   ```xml
-   <parent>
-       <groupId>org.springframework.boot</groupId>
-       <artifactId>spring-boot-starter-parent</artifactId>
-       <version>3.2.0</version>
-   </parent>
-   
-   <properties>
-       <java.version>17</java.version>
-   </properties>
-   ```
-
-5. **Alternative: Use Spring Initializr via Copilot:**
-   - In Copilot Chat:
-   ```
-   Generate a Spring Boot project configuration for a user management REST API with JPA and Azure SQL Database
-   ```
-
-6. **Verify Maven build:**
-   ```bash
-   mvn clean compile
-   ```
-
-**✓ Checkpoint:** Spring Boot project structure created with valid pom.xml.
-
----
-
-### Exercise 7.2: Migrate User Model to JPA Entity (10 minutes)
-
-Let's convert the plain Java `User` class to a JPA entity.
-
-1. **Open the legacy User.java:**
-   ```bash
-   code ../app/src/main/java/com/example/model/User.java
-   ```
-
-2. **Create new User entity:**
-   - In `app-modernized`, create: `src/main/java/com/example/model/User.java`
-
-3. **Copy the legacy User class content**
-
-4. **Ask Copilot to convert to JPA entity:**
-   - Select all code in the file
-   - Press `Ctrl + I` to open inline chat
-   - Type:
-   ```
-   Convert this plain Java class to a JPA entity with proper annotations for Azure SQL Database
-   ```
-
-5. **Copilot should add:**
-   ```java
-   @Entity
-   @Table(name = "users")
-   public class User {
-       @Id
-       @GeneratedValue(strategy = GenerationType.IDENTITY)
-       private Integer id;
-       
-       @Column(nullable = false, unique = true, length = 50)
-       private String username;
-       
-       @Column(name = "firstname", length = 50)
-       private String firstname;
-       
-       // ... other fields with annotations
-   }
-   ```
-
-6. **Add Lombok to reduce boilerplate (optional but recommended):**
-   - In pom.xml, add dependency (ask Copilot for Lombok dependency)
-   - Add to User class:
-   ```java
-   @Data
-   @NoArgsConstructor
-   @AllArgsConstructor
-   @Entity
-   @Table(name = "users")
-   public class User {
-       // Fields only - getters/setters generated by Lombok
-   }
-   ```
-
-7. **Ask Copilot to explain what changed:**
-   ```
-   Explain the differences between the legacy User class and this JPA entity version
-   ```
-
-**✓ Checkpoint:** User class is now a JPA entity with proper annotations.
-
----
-
-### Exercise 7.3: Create Spring Data JPA Repository (5 minutes)
-
-Replace the entire UserDAO with a Spring Data JPA Repository interface.
-
-1. **Create repository interface:**
-   - New file: `src/main/java/com/example/repository/UserRepository.java`
-
-2. **Write a comment:**
-   ```java
-   // Spring Data JPA repository for User entity with standard CRUD operations
-   ```
-
-3. **Let Copilot generate:**
-   ```java
-   package com.example.repository;
-   
-   import com.example.model.User;
-   import org.springframework.data.jpa.repository.JpaRepository;
-   import org.springframework.stereotype.Repository;
-   
-   @Repository
-   public interface UserRepository extends JpaRepository<User, Integer> {
-       // Spring Data auto-implements:
-       // - findAll()
-       // - findById()
-       // - save()
-       // - deleteById()
-       // - and 20+ more methods!
-   }
-   ```
-
-4. **Ask Copilot about the benefits:**
-   ```
-   How many lines of code did we eliminate by using Spring Data JPA instead of the UserDAO?
-   ```
-
-**Result:** 126 lines of JDBC code (UserDAO.java) replaced by ~5 lines! This is the power of modern frameworks.
-
-**✓ Checkpoint:** Repository interface created - no implementation needed!
-
----
-
-### Exercise 7.4: Create Spring Boot REST Controller (15 minutes)
-
-Replace UserServlet with a modern Spring Boot REST controller.
-
-1. **Create controller class:**
-   - New file: `src/main/java/com/example/controller/UserController.java`
-
-2. **Start with a comment describing what we need:**
-   ```java
-   /*
-    * REST Controller for User management
-    * Endpoints:
-    * - GET /api/users - Get all users
-    * - GET /api/users/{id} - Get user by ID
-    * - POST /api/users - Create new user
-    * - PUT /api/users/{id} - Update user
-    * - DELETE /api/users/{id} - Delete user
-    */
-   ```
-
-3. **Let Copilot generate the controller:**
-   - Press Enter after comment
-   - Copilot should suggest the class structure
-
-4. **If Copilot needs help, start with class definition:**
-   ```java
-   @RestController
-   @RequestMapping("/api/users")
-   public class UserController {
-       
-       @Autowired
-       private UserRepository userRepository;
-       
-       // Copilot will suggest methods...
-   }
-   ```
-
-5. **Accept Copilot suggestions for each endpoint:**
-
-   **Example - Get all users:**
-   ```java
-   // Type comment:
-   // GET endpoint to retrieve all users
-   
-   // Copilot suggests:
-   @GetMapping
-   public List<User> getAllUsers() {
-       return userRepository.findAll();
-   }
-   ```
-
-   **Example - Get by ID:**
-   ```java
-   // GET endpoint to retrieve user by ID with error handling
-   @GetMapping("/{id}")
-   public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-       return userRepository.findById(id)
-           .map(ResponseEntity::ok)
-           .orElse(ResponseEntity.notFound().build());
-   }
-   ```
-
-6. **Ask Copilot to complete the rest:**
-   - In Copilot Chat:
-   ```
-   Complete the UserController with POST, PUT, and DELETE endpoints following REST best practices
-   ```
-
-7. **Review generated code:**
-   - Ensure proper HTTP status codes (201 for created, 204 for deleted)
-   - Error handling with ResponseEntity
-   - Validation annotations (optional: `@Valid`)
-
-**✓ Checkpoint:** Complete REST controller with all CRUD endpoints.
-
----
-
-### Exercise 7.5: Create Spring Boot Application Class (5 minutes)
-
-Every Spring Boot app needs a main application class.
-
-1. **Create main class:**
-   - New file: `src/main/java/com/example/Application.java`
-
-2. **Ask Copilot:**
-   ```java
-   // Spring Boot main application class with embedded Tomcat
-   ```
-
-3. **Accept suggestion:**
-   ```java
-   package com.example;
-   
-   import org.springframework.boot.SpringApplication;
-   import org.springframework.boot.autoconfigure.SpringBootApplication;
-   
-   @SpringBootApplication
-   public class Application {
-       public static void main(String[] args) {
-           SpringApplication.run(Application.class, args);
-       }
-   }
-   ```
-
-4. **That's it!** No web.xml, no Tomcat configuration needed.
-
-**✓ Checkpoint:** Application can start with `mvn spring-boot:run`.
-
----
-
-## 8. Database Migration
-
-### Exercise 8.1: Create application.properties (10 minutes)
-
-Externalize all configuration - no more hardcoded values!
-
-1. **Create configuration file:**
-   - New file: `src/main/resources/application.properties`
-
-2. **Ask Copilot for database configuration:**
-   ```properties
-   # Spring Boot configuration for Azure SQL Database
-   # with connection pooling and JPA settings
-   ```
-
-3. **Copilot should generate:**
-   ```properties
-   # Database Configuration
-   spring.datasource.url=${DATABASE_URL:jdbc:sqlserver://localhost:1433;databaseName=userdb}
-   spring.datasource.username=${DATABASE_USERNAME:sa}
-   spring.datasource.password=${DATABASE_PASSWORD:}
-   spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
-   
-   # JPA Configuration
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
-   spring.jpa.properties.hibernate.format_sql=true
-   
-   # Connection Pool
-   spring.datasource.hikari.maximum-pool-size=10
-   spring.datasource.hikari.minimum-idle=5
-   
-   # Application
-   server.port=8080
-   ```
-
-4. **Notice the environment variable pattern:**
-   ```properties
-   ${DATABASE_URL:jdbc:sqlserver://localhost:1433;databaseName=userdb}
-   #   ^             ^
-   #   |             |
-   #   |             Default value if env var not set
-   #   Environment variable name
-   ```
-
-5. **For development, create application-dev.properties:**
-   ```properties
-   # Development profile with H2 in-memory database (SQL Server compatible mode)
-   spring.datasource.url=jdbc:h2:mem:testdb;MODE=MSSQLServer
-   spring.datasource.driver-class-name=org.h2.Driver
-   spring.jpa.hibernate.ddl-auto=create-drop
-   spring.h2.console.enabled=true
-   ```
-
-**Note:** For this hackathon, we're using H2 in-memory database with SQL Server compatibility mode for local testing. The actual Azure SQL Database connection will be configured during Azure deployment.
-
-**✓ Checkpoint:** Configuration externalized, no hardcoded credentials!
-
----
-
-### Exercise 8.2: Create Database Schema (5 minutes)
-
-Spring Boot with JPA can auto-create schema, but for production we prefer explicit DDL.
-
-1. **Create schema file:**
-   - New file: `src/main/resources/schema.sql`
-
-2. **Ask Copilot to convert Sybase schema:**
-   - Open `../app/src/main/resources/database.sql`
-   - Copy the Sybase DDL
-   - In Copilot Chat:
-   ```
-   Convert this Sybase DDL to Azure SQL-compatible DDL:
-   [paste Sybase DDL]
-   ```
-
-3. **Copilot converts Sybase specifics:**
-   - `IDENTITY` → `SERIAL` or `GENERATED ALWAYS AS IDENTITY`
-   - `GETDATE()` → `CURRENT_TIMESTAMP`
-   - `VARCHAR` sizes adjusted if needed
-   - Removes Sybase-specific keywords
-
-4. **Example conversion:**
-   
-   **Before (Sybase):**
-   ```sql
-   CREATE TABLE users (
-       id INT IDENTITY PRIMARY KEY,
-       username VARCHAR(50) NOT NULL UNIQUE,
-       created_date DATETIME DEFAULT GETDATE()
-   )
-   ```
-
-   **After (Azure SQL):**
-   ```sql
-   CREATE TABLE users (
-       id INT IDENTITY(1,1) PRIMARY KEY,
-       username VARCHAR(50) NOT NULL UNIQUE,
-       created_date DATETIME2 DEFAULT GETDATE()
-   );
-   ```
-
-5. **Create sample data:**
-   - New file: `src/main/resources/data.sql`
-   - Ask Copilot to generate INSERT statements
-
-**✓ Checkpoint:** Database schema ready for Azure SQL Database.
-
-**Note:** During the hackathon, you won't deploy an actual Azure SQL database. The code modernization prepares the application to be Azure SQL-ready for future deployment.
-
----
-
-### Exercise 8.3: Handle Database-Specific SQL (5 minutes)
-
-The `getTopUsers()` method uses Sybase-specific SQL. Let's fix it.
-
-1. **Review the problematic code:**
-   ```java
-   // In UserDAO.java
-   stmt.execute("SET ROWCOUNT 3");  // Sybase-specific!
-   ```
-
-2. **With Spring Data JPA, this becomes trivial:**
-   - Open `UserRepository.java`
-   
-   - Add a method:
-   ```java
-   // Spring Data JPA query to get top 3 users ordered by ID
-   ```
-
-3. **Copilot should suggest:**
-
-   ```java
-   List<User> findTop3ByOrderByIdAsc();
-   ```
-
-4. **That's it!** Spring Data JPA:
-   - Parses the method name
-   - Generates the SQL query
-   - Handles database dialect differences
-   - Works on any database (Azure SQL, MySQL, H2, etc.)
-
-5. **No more database-specific SQL!**
-
-**✓ Checkpoint:** Database-agnostic queries using Spring Data JPA.
-
----
-
-## 9. Building REST APIs
-
-### Exercise 9.1: Test REST Endpoints (10 minutes)
+### Exercise 8.1: Test REST Endpoints (10 minutes)
 
 Let's verify our new REST API works.
 
@@ -1186,7 +913,7 @@ Let's verify our new REST API works.
 
 ---
 
-### Exercise 9.2: Add API Documentation with Swagger (Optional, 10 minutes)
+### Exercise 8.2: Add API Documentation with Swagger (Optional, 10 minutes)
 
 Spring Boot makes it easy to add interactive API documentation.
 
@@ -1239,9 +966,9 @@ Spring Boot makes it easy to add interactive API documentation.
 
 ---
 
-## 10. Testing and Validation
+## 9. Testing and Validation
 
-### Exercise 10.1: Generate Unit Tests with Copilot (15 minutes)
+### Exercise 9.1: Generate Unit Tests with Copilot (15 minutes)
 
 Let's use Copilot to generate tests for our modernized code.
 
@@ -1303,7 +1030,7 @@ Let's use Copilot to generate tests for our modernized code.
 
 ---
 
-### Exercise 10.2: Integration Testing (10 minutes)
+### Exercise 9.2: Integration Testing (10 minutes)
 
 Test the full stack together.
 
@@ -1361,9 +1088,9 @@ Test the full stack together.
 
 ---
 
-## 11. Preparing for Cloud Deployment
+## 10. Preparing for Cloud Deployment
 
-### Exercise 11.1: Create Dockerfile (10 minutes)
+### Exercise 10.1: Create Dockerfile (10 minutes)
 
 Containerize the application for cloud deployment.
 
@@ -1417,7 +1144,7 @@ Containerize the application for cloud deployment.
 
 ---
 
-### Exercise 11.2: Create Azure Deployment Configuration (Optional, 10 minutes)
+### Exercise 10.2: Create Azure Deployment Configuration (Optional, 10 minutes)
 
 If time permits and you have Azure access.
 
@@ -1462,7 +1189,7 @@ If time permits and you have Azure access.
 
 ---
 
-## 12. Best Practices and Tips
+## 11. Best Practices and Tips
 
 ### Using GitHub Copilot Effectively
 
