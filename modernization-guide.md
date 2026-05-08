@@ -404,18 +404,18 @@ Use a custom assessment when you need to target specific domains, analysis cover
 
 **General: Assessment Domains**
 
-| Domain | Description |
-|--------|-------------|
-| Java Upgrade | Identify outdated app stacks and get upgrade recommendations. |
-| Cloud Readiness | Assess your app's readiness for Azure, with actionable migration guidance. |
-| Security | Scan your code for security issues using ISO 5055 guidelines, with recommended fixes. |
+| Domain          | Description                                                                           |
+|-----------------|---------------------------------------------------------------------------------------|
+| Java Upgrade    | Identify outdated app stacks and get upgrade recommendations.                         |
+| Cloud Readiness | Assess your app's readiness for Azure, with actionable migration guidance.            |
+| Security        | Scan your code for security issues using ISO 5055 guidelines, with recommended fixes. |
 
 **General: Analysis Coverage**
 
-| Coverage | Description |
-|----------|-------------|
-| Issue only | Analyze source code to detect issues. |
-| Issues & Technologies | Detect issues and identify used technologies. |
+| Coverage                            | Description                                                 |
+|-------------------------------------|-------------------------------------------------------------|
+| Issue only                          | Analyze source code to detect issues.                       |
+| Issues & Technologies               | Detect issues and identify used technologies.               |
 | Issues, Technologies & Dependencies | Detect issues, identify technologies, and map dependencies. |
 
 **Java Upgrade: Target Runtime** (when Java Upgrade is selected): OpenJDK 21 (recommended), OpenJDK 17, or OpenJDK 11.
@@ -484,11 +484,11 @@ Categorized list of issues across Cloud Readiness, Java Upgrade, and Security th
 
 **Criticality:**
 
-| Level | Meaning |
-|-------|---------|
-| Mandatory | Issues that you must fix for migration to Azure. |
-| Potential | Issues that might impact migration and need review. |
-| Optional | Low-impact issues. Fixing them is recommended but optional. |
+| Level     | Meaning                                                     |
+|-----------|-------------------------------------------------------------|
+| Mandatory | Issues that you must fix for migration to Azure.            |
+| Potential | Issues that might impact migration and need review.         |
+| Optional  | Low-impact issues. Fixing them is recommended but optional. |
 
 ![Issue list](https://learn.microsoft.com/en-us/azure/developer/java/migration/media/migrate-github-copilot-app-modernization-for-java/assessment-report-issue-list-visual-studio-code.png)
 
@@ -527,35 +527,35 @@ The assessment detects issues across three domains. Cross-reference the rules be
 
 Identifies portability, scalability, and statelessness concerns that block successful Azure migration.
 
-| Rule | What it detects |
-|------|-----------------|
-| credential-migration | Hardcoded cloud credentials and embedded secret-management libraries. |
-| region-configuration | Hardcoded cloud region identifiers in code or config. |
-| storage-migration | Vendor object-storage SDK usage (AWS S3, GCS) that doesn't map to native Azure storage. |
-| messaging-service-migration | Dependencies and connection strings for SQS/SNS, Kafka, RabbitMQ, ActiveMQ, IBM MQ, Pub/Sub, etc. |
-| **database-migration** | Connection strings, drivers, and timeouts for MongoDB, MySQL, PostgreSQL, MSSQL, Cassandra, MariaDB, Oracle, Db2, **Sybase ASE**, Firebird, SQLite, and more. |
-| file-system-management | Local filesystem reads/writes that break in ephemeral cloud containers. |
-| local-credential | `.jks` keystore files and clear-text passwords in property/XML files. |
-| configuration-management | OS-specific or local-file configuration that doesn't scale. |
-| session-management | `HttpSession` state and the `distributable` web descriptor tag. |
-| remote-communication | CORBA, RMI, JCA, unsecured HTTP/FTP, raw sockets, hardcoded URLs. |
-| jakarta-migration | Jakarta/Java EE APIs and proprietary JBoss/WebLogic/WebSphere artifacts. |
-| containerization | Missing Dockerfile or problematic Dockerfile instructions. |
-| scheduled-job-migration | AWS Lambda handlers, GCP Functions, Quartz, Spring Batch — needs cloud event-driven refactor. |
-| apm-migration | Embedded New Relic / Elastic APM / Dynatrace agents. |
-| auth-migration | SAML, OAuth 2.0, OpenID, Spring Security, LDAP, legacy webform auth. |
-| os-compatibility | Windows-specific `.dll` dependencies that don't run on Linux containers. |
+| Rule                        | What it detects                                                                                                                                               |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| credential-migration        | Hardcoded cloud credentials and embedded secret-management libraries.                                                                                         |
+| region-configuration        | Hardcoded cloud region identifiers in code or config.                                                                                                         |
+| storage-migration           | Vendor object-storage SDK usage (AWS S3, GCS) that doesn't map to native Azure storage.                                                                       |
+| messaging-service-migration | Dependencies and connection strings for SQS/SNS, Kafka, RabbitMQ, ActiveMQ, IBM MQ, Pub/Sub, etc.                                                             |
+| **database-migration**      | Connection strings, drivers, and timeouts for MongoDB, MySQL, PostgreSQL, MSSQL, Cassandra, MariaDB, Oracle, Db2, **Sybase ASE**, Firebird, SQLite, and more. |
+| file-system-management      | Local filesystem reads/writes that break in ephemeral cloud containers.                                                                                       |
+| local-credential            | `.jks` keystore files and clear-text passwords in property/XML files.                                                                                         |
+| configuration-management    | OS-specific or local-file configuration that doesn't scale.                                                                                                   |
+| session-management          | `HttpSession` state and the `distributable` web descriptor tag.                                                                                               |
+| remote-communication        | CORBA, RMI, JCA, unsecured HTTP/FTP, raw sockets, hardcoded URLs.                                                                                             |
+| jakarta-migration           | Jakarta/Java EE APIs and proprietary JBoss/WebLogic/WebSphere artifacts.                                                                                      |
+| containerization            | Missing Dockerfile or problematic Dockerfile instructions.                                                                                                    |
+| scheduled-job-migration     | AWS Lambda handlers, GCP Functions, Quartz, Spring Batch — needs cloud event-driven refactor.                                                                 |
+| apm-migration               | Embedded New Relic / Elastic APM / Dynatrace agents.                                                                                                          |
+| auth-migration              | SAML, OAuth 2.0, OpenID, Spring Security, LDAP, legacy webform auth.                                                                                          |
+| os-compatibility            | Windows-specific `.dll` dependencies that don't run on Linux containers.                                                                                      |
 
 **For our app:** the **database-migration** rule will flag the Sybase ASE driver — a key issue for our Sybase → Azure SQL move.
 
 #### Domain: java-upgrade
 
-| Rule | What it detects |
-|------|-----------------|
-| java-version-upgrade | Non-LTS Java versions (9, 10, 12–16, 19, 20) and legacy versions (1.x–8, 11). |
-| framework-upgrade | Spring Boot, Spring Cloud, Spring Framework, Jakarta EE versions past end-of-OSS-support. |
-| deprecated-apis | Hundreds of removed/deprecated APIs (`sun.misc.BASE64`, `Thread.stop`, JBoss/Seam/WebLogic/WebSphere internals). |
-| build-tool | Legacy build systems like Ant (`build.xml`) or Eclipse-specific WTP/JEM project natures. |
+| Rule                 | What it detects                                                                                                  |
+|----------------------|------------------------------------------------------------------------------------------------------------------|
+| java-version-upgrade | Non-LTS Java versions (9, 10, 12–16, 19, 20) and legacy versions (1.x–8, 11).                                    |
+| framework-upgrade    | Spring Boot, Spring Cloud, Spring Framework, Jakarta EE versions past end-of-OSS-support.                        |
+| deprecated-apis      | Hundreds of removed/deprecated APIs (`sun.misc.BASE64`, `Thread.stop`, JBoss/Seam/WebLogic/WebSphere internals). |
+| build-tool           | Legacy build systems like Ant (`build.xml`) or Eclipse-specific WTP/JEM project natures.                         |
 
 **For our app:** **java-version-upgrade** will flag Java 8 (legacy) and **build-tool** may flag any legacy patterns.
 
@@ -565,26 +565,26 @@ The Security domain detects 42 security weaknesses curated from the [ISO/IEC 505
 
 Highlights you are likely to see in this codebase:
 
-| CWE | Title |
-|-----|-------|
-| CWE-89 | SQL Injection |
-| CWE-564 | SQL Injection: Hibernate |
-| CWE-79 | Cross-site Scripting |
-| CWE-22 / CWE-23 / CWE-36 | Path Traversal variants |
-| CWE-77 / CWE-78 / CWE-88 | Command and Argument Injection |
-| CWE-90 / CWE-91 / CWE-643 / CWE-652 | LDAP / XML / XPath / XQuery Injection |
-| CWE-259 / CWE-321 / CWE-798 | Hard-coded password / cryptographic key / credentials |
-| CWE-434 | Unrestricted Upload of File with Dangerous Type |
-| CWE-456 / CWE-457 / CWE-665 | Missing/improper variable or resource initialization |
-| CWE-477 | Use of Obsolete Function |
-| CWE-502 | Deserialization of Untrusted Data |
-| CWE-543 / CWE-567 / CWE-662 / CWE-820 / CWE-821 | Synchronization & multithreading issues |
-| CWE-611 | Improper Restriction of XML External Entity Reference |
-| CWE-732 | Incorrect Permission Assignment for Critical Resource |
-| CWE-772 / CWE-775 | Missing Release of Resource / File Descriptor |
-| CWE-778 | Insufficient Logging |
-| CWE-835 | Loop with Unreachable Exit Condition (infinite loop) |
-| CWE-1057 | Data access bypassing the central data manager component |
+| CWE                                             | Title                                                    |
+|-------------------------------------------------|----------------------------------------------------------|
+| CWE-89                                          | SQL Injection                                            |
+| CWE-564                                         | SQL Injection: Hibernate                                 |
+| CWE-79                                          | Cross-site Scripting                                     |
+| CWE-22 / CWE-23 / CWE-36                        | Path Traversal variants                                  |
+| CWE-77 / CWE-78 / CWE-88                        | Command and Argument Injection                           |
+| CWE-90 / CWE-91 / CWE-643 / CWE-652             | LDAP / XML / XPath / XQuery Injection                    |
+| CWE-259 / CWE-321 / CWE-798                     | Hard-coded password / cryptographic key / credentials    |
+| CWE-434                                         | Unrestricted Upload of File with Dangerous Type          |
+| CWE-456 / CWE-457 / CWE-665                     | Missing/improper variable or resource initialization     |
+| CWE-477                                         | Use of Obsolete Function                                 |
+| CWE-502                                         | Deserialization of Untrusted Data                        |
+| CWE-543 / CWE-567 / CWE-662 / CWE-820 / CWE-821 | Synchronization & multithreading issues                  |
+| CWE-611                                         | Improper Restriction of XML External Entity Reference    |
+| CWE-732                                         | Incorrect Permission Assignment for Critical Resource    |
+| CWE-772 / CWE-775                               | Missing Release of Resource / File Descriptor            |
+| CWE-778                                         | Insufficient Logging                                     |
+| CWE-835                                         | Loop with Unreachable Exit Condition (infinite loop)     |
+| CWE-1057                                        | Data access bypassing the central data manager component |
 
 **For our app:** expect **CWE-798 / CWE-259** to flag the hardcoded `sa` / `Welcome1234!` credentials in `DatabaseConnection.java`, and **CWE-89** to flag any string-concatenated SQL in `UserDAO.java`.
 
@@ -782,15 +782,15 @@ Sybase ASE and Microsoft SQL Server share **Transact-SQL (T-SQL) heritage**, so 
 
 Spot-check the most common Sybase → Azure SQL conversions in the diff:
 
-| Sybase ASE | Azure SQL Database |
-|------------|---------------------|
-| `SET ROWCOUNT 3` then query | `SELECT TOP 3 ...` |
-| `id INT IDENTITY` | `id INT IDENTITY(1,1)` |
-| `DATETIME DEFAULT GETDATE()` | `DATETIME2 DEFAULT SYSUTCDATETIME()` |
-| `sp_*` Sybase system procedures | Azure SQL DMV equivalents (e.g., `sys.dm_*`) |
-| `String.format` SQL concatenation | Parameterized `PreparedStatement` / JPA |
-| `com.sybase.jdbc4.jdbc.SybDriver` | `com.microsoft.sqlserver.jdbc.SQLServerDriver` |
-| `jdbc:sybase:Tds:host:port/db` | `jdbc:sqlserver://host:1433;database=db;authentication=ActiveDirectoryDefault` |
+| Sybase ASE                        | Azure SQL Database                                                             |
+|-----------------------------------|--------------------------------------------------------------------------------|
+| `SET ROWCOUNT 3` then query       | `SELECT TOP 3 ...`                                                             |
+| `id INT IDENTITY`                 | `id INT IDENTITY(1,1)`                                                         |
+| `DATETIME DEFAULT GETDATE()`      | `DATETIME2 DEFAULT SYSUTCDATETIME()`                                           |
+| `sp_*` Sybase system procedures   | Azure SQL DMV equivalents (e.g., `sys.dm_*`)                                   |
+| `String.format` SQL concatenation | Parameterized `PreparedStatement` / JPA                                        |
+| `com.sybase.jdbc4.jdbc.SybDriver` | `com.microsoft.sqlserver.jdbc.SQLServerDriver`                                 |
+| `jdbc:sybase:Tds:host:port/db`    | `jdbc:sqlserver://host:1433;database=db;authentication=ActiveDirectoryDefault` |
 
 **Tip:** With Spring Data JPA you can replace `SET ROWCOUNT 3` with a method-name query:
 
@@ -907,6 +907,7 @@ Let's verify our new REST API works.
      "email": "test@example.com"
    }
    ```
+
    - Click "Send Request" above each request
 
 **✓ Checkpoint:** All REST endpoints respond correctly.
@@ -957,8 +958,8 @@ Spring Boot makes it easy to add interactive API documentation.
    ```
 
 5. **Restart app and visit:**
-   - **Swagger UI:** http://localhost:8080/swagger-ui.html
-   - **OpenAPI spec:** http://localhost:8080/v3/api-docs
+   - **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+   - **OpenAPI spec:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 6. **Test APIs directly from Swagger UI!**
 
@@ -1220,7 +1221,7 @@ If time permits and you have Azure access.
 
 #### 4. Use Chat for Explanations
 
-```
+```text
 Explain what @Transactional does in Spring Boot
 ```
 
